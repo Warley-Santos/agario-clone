@@ -6,20 +6,20 @@ export default function () {
     function startGame() {
         let gameState = {};
 
-        let player = { id: '1234', position: { x: 500, y: 500, radius: 3 } };
+        let player = { id: '1234', position: { x: 500, y: 500, radius: 30 } };
 
         gameState = {
             player: player,
             bolinhas: [
-                { id: util.random(10000), x: util.random(canvas.width), y: util.random(canvas.height), radius: util.randomMin(1, 4), color: util.randomColorHex() },
-                { id: util.random(10000), x: util.random(canvas.width), y: util.random(canvas.height), radius: util.randomMin(1, 4), color: util.randomColorHex() },
-                { id: util.random(10000), x: util.random(canvas.width), y: util.random(canvas.height), radius: util.randomMin(1, 4), color: util.randomColorHex() },
-                { id: util.random(10000), x: util.random(canvas.width), y: util.random(canvas.height), radius: util.randomMin(1, 4), color: util.randomColorHex() },
-                { id: util.random(10000), x: util.random(canvas.width), y: util.random(canvas.height), radius: util.randomMin(1, 4), color: util.randomColorHex() },
-                { id: util.random(10000), x: util.random(canvas.width), y: util.random(canvas.height), radius: util.randomMin(1, 4), color: util.randomColorHex() },
-                { id: util.random(10000), x: util.random(canvas.width), y: util.random(canvas.height), radius: util.randomMin(1, 4), color: util.randomColorHex() },
-                { id: util.random(10000), x: util.random(canvas.width), y: util.random(canvas.height), radius: util.randomMin(1, 4), color: util.randomColorHex() },
-                { id: util.random(10000), x: util.random(canvas.width), y: util.random(canvas.height), radius: util.randomMin(1, 4), color: util.randomColorHex() },
+                { id: util.random(10000), x: util.random(canvas.width), y: util.random(canvas.height), radius: util.randomMin(10, 40), color: util.randomColorHex() },
+                { id: util.random(10000), x: util.random(canvas.width), y: util.random(canvas.height), radius: util.randomMin(10, 40), color: util.randomColorHex() },
+                { id: util.random(10000), x: util.random(canvas.width), y: util.random(canvas.height), radius: util.randomMin(10, 40), color: util.randomColorHex() },
+                { id: util.random(10000), x: util.random(canvas.width), y: util.random(canvas.height), radius: util.randomMin(10, 40), color: util.randomColorHex() },
+                { id: util.random(10000), x: util.random(canvas.width), y: util.random(canvas.height), radius: util.randomMin(10, 40), color: util.randomColorHex() },
+                { id: util.random(10000), x: util.random(canvas.width), y: util.random(canvas.height), radius: util.randomMin(10, 40), color: util.randomColorHex() },
+                { id: util.random(10000), x: util.random(canvas.width), y: util.random(canvas.height), radius: util.randomMin(10, 40), color: util.randomColorHex() },
+                { id: util.random(10000), x: util.random(canvas.width), y: util.random(canvas.height), radius: util.randomMin(10, 40), color: util.randomColorHex() },
+                { id: util.random(10000), x: util.random(canvas.width), y: util.random(canvas.height), radius: util.randomMin(10, 40), color: util.randomColorHex() },
             ]
         };
 
@@ -34,8 +34,6 @@ export default function () {
     }
 
     function checkColision(game) {
-        const screen = screenRender();
-
         let playerPos = game.player.position;
 
         for (const bolinha of game.bolinhas) {
@@ -44,10 +42,10 @@ export default function () {
 
             let distance = Math.sqrt(dx * dx + dy * dy);
 
-            if (distance < (playerPos.radius * screen.defaultSize) + (bolinha.radius * screen.defaultSize)) {
+            if (distance < (playerPos.radius) + (bolinha.radius)) {
                 console.log(`bateu: ${distance}`);
 
-                if (distance < (playerPos.radius * screen.defaultSize) - (bolinha.radius * screen.defaultSize)) {
+                if (distance < (playerPos.radius) - (bolinha.radius)) {
                     console.log(`engoliu: ${distance}`);
 
                     game.bolinhas = game.bolinhas.filter((value, index, arr) => {

@@ -1,7 +1,6 @@
 import game from './game.js';
 
 export default function () {
-    const defaultSize = 10;
     const canvasSize = { width: 1000, height: 1000 };
 
     let mousePosition;
@@ -33,14 +32,14 @@ export default function () {
 
     function drawCircularEntity(canvasContext, itemPosition, color) {
         canvasContext.beginPath();
-        canvasContext.arc(itemPosition.x, itemPosition.y, itemPosition.radius * defaultSize, 0, Math.PI * 2, true);
+        canvasContext.arc(itemPosition.x, itemPosition.y, itemPosition.radius, 0, Math.PI * 2, true);
         canvasContext.fillStyle = color;
         canvasContext.fill();
 
         canvasContext.font = '25px serif';
         canvasContext.fillStyle = '#000000';
         canvasContext.textAlign = 'center';
-        canvasContext.fillText(itemPosition.radius * defaultSize, itemPosition.x, itemPosition.y);
+        canvasContext.fillText(itemPosition.radius, itemPosition.x, itemPosition.y);
     }
 
     function setMousePos(evt) {
@@ -69,6 +68,6 @@ export default function () {
 
     window.onresize = fixDpi;
 
-    return { renderScreen, fixDpi, defaultSize }
+    return { renderScreen, fixDpi }
 }
 
