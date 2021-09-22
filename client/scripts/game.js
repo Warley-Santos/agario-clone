@@ -1,5 +1,4 @@
 import util from './util.js';
-import screenRender from "./screenRender.js";
 
 export default function () {
 
@@ -10,30 +9,30 @@ export default function () {
 
         gameState = {
             player: player,
-            bolinhas: [
-                { id: util.random(10000), x: util.random(canvas.width), y: util.random(canvas.height), radius: util.randomMin(10, 40), color: util.randomColorHex() },
-                { id: util.random(10000), x: util.random(canvas.width), y: util.random(canvas.height), radius: util.randomMin(10, 40), color: util.randomColorHex() },
-                { id: util.random(10000), x: util.random(canvas.width), y: util.random(canvas.height), radius: util.randomMin(10, 40), color: util.randomColorHex() },
-                { id: util.random(10000), x: util.random(canvas.width), y: util.random(canvas.height), radius: util.randomMin(10, 40), color: util.randomColorHex() },
-                { id: util.random(10000), x: util.random(canvas.width), y: util.random(canvas.height), radius: util.randomMin(10, 40), color: util.randomColorHex() },
-                { id: util.random(10000), x: util.random(canvas.width), y: util.random(canvas.height), radius: util.randomMin(10, 40), color: util.randomColorHex() },
-                { id: util.random(10000), x: util.random(canvas.width), y: util.random(canvas.height), radius: util.randomMin(10, 40), color: util.randomColorHex() },
-                { id: util.random(10000), x: util.random(canvas.width), y: util.random(canvas.height), radius: util.randomMin(10, 40), color: util.randomColorHex() },
-                { id: util.random(10000), x: util.random(canvas.width), y: util.random(canvas.height), radius: util.randomMin(10, 40), color: util.randomColorHex() },
-            ]
+            bolinhas: geraBolinhas(30)
         };
 
         return gameState;
     }
 
+    function geraBolinhas(quantidade) {
+        let bolinhas = [];
+
+        for (var i = 0; i < quantidade; i++) {
+            bolinhas.push({ id: util.random(1000000), x: util.random(canvas.width), y: util.random(canvas.height), radius: util.randomMin(10, 50), color: util.randomColorHex() });
+        }
+
+        return bolinhas;
+    }
+
     function gameLoop(gameState, mouseposition) {
-        let game = checkColision(gameState);
+        let game = checkCollisionCapture(gameState);
         game.player = movePlayer(game.player, mouseposition);
 
         return game;
     }
 
-    function checkColision(game) {
+    function checkCollisionCapture(game) {
         let playerPos = game.player.position;
 
         for (const bolinha of game.bolinhas) {
@@ -42,12 +41,14 @@ export default function () {
 
             let distance = Math.sqrt(dx * dx + dy * dy);
 
+            //collision
             if (distance < (playerPos.radius) + (bolinha.radius)) {
-                console.log(`bateu: ${distance}`);
 
+                //catch
                 if (distance < (playerPos.radius) - (bolinha.radius)) {
-                    console.log(`engoliu: ${distance}`);
+                    console.log(`catch: ${bolinha.id}`);
 
+                    game.player.position.radius = incrementPlayer(playerPos, bolinha);
                     game.bolinhas = game.bolinhas.filter((value, index, arr) => {
                         return value.id != bolinha.id;
                     });
@@ -58,6 +59,16 @@ export default function () {
         }
 
         return game;
+    }
+
+    function incrementPlayer(playerPosition, bolinha) {
+        let areaPlayer = Math.PI * Math.pow(playerPosition.radius, 2);
+        let areaBolinha = Math.PI * Math.pow(bolinha.radius, 2);
+        let areaTotal = areaPlayer + areaBolinha;
+
+        let newRadius = Math.sqrt(areaTotal / Math.PI);
+
+        return newRadius;
     }
 
     function movePlayer(player, position) {
@@ -71,13 +82,13 @@ export default function () {
     function nextPosition(startPos, finalPos) {
         let speed = 15;
         let nextPos;
-        
+
         let dx = finalPos.x - startPos.x;
         let dy = finalPos.y - startPos.y;
 
         let length = Math.sqrt(dx * dx + dy * dy);
 
-        // altera a velocidade para fazer uma parada suave no destino
+        // smooth stop
         if (length <= startPos.radius * 100) {
             let newSpeed = length / speed;
 
