@@ -9,20 +9,20 @@ export default function () {
 
         gameState = {
             player: player,
-            bolinhas: geraBolinhas(30)
+            balls: generateBalls(30)
         };
 
         return gameState;
     }
 
-    function geraBolinhas(quantidade) {
-        let bolinhas = [];
+    function generateBalls(quantidade) {
+        let balls = [];
 
         for (var i = 0; i < quantidade; i++) {
-            bolinhas.push({ id: util.random(1000000), x: util.random(canvas.width), y: util.random(canvas.height), radius: util.randomMin(10, 50), color: util.randomColorHex() });
+            balls.push({ id: util.random(1000000), x: util.random(canvas.width), y: util.random(canvas.height), radius: util.randomMin(10, 50), color: util.randomColorHex() });
         }
 
-        return bolinhas;
+        return balls;
     }
 
     function gameLoop(gameState, mouseposition) {
@@ -35,22 +35,22 @@ export default function () {
     function checkCollisionCapture(game) {
         let playerPos = game.player.position;
 
-        for (const bolinha of game.bolinhas) {
-            let dx = bolinha.x - playerPos.x;
-            let dy = bolinha.y - playerPos.y;
+        for (const ball of game.balls) {
+            let dx = ball.x - playerPos.x;
+            let dy = ball.y - playerPos.y;
 
             let distance = Math.sqrt(dx * dx + dy * dy);
 
             //collision
-            if (distance < (playerPos.radius) + (bolinha.radius)) {
+            if (distance < (playerPos.radius) + (ball.radius)) {
 
                 //catch
-                if (distance < (playerPos.radius) - (bolinha.radius)) {
-                    console.log(`catch: ${bolinha.id}`);
+                if (distance < (playerPos.radius) - (ball.radius)) {
+                    console.log(`catch: ${ball.id}`);
 
-                    game.player.position.radius = incrementPlayer(playerPos, bolinha);
-                    game.bolinhas = game.bolinhas.filter((value, index, arr) => {
-                        return value.id != bolinha.id;
+                    game.player.position.radius = incrementPlayer(playerPos, ball);
+                    game.balls = game.balls.filter((value, index, arr) => {
+                        return value.id != ball.id;
                     });
 
                     return game;
@@ -61,12 +61,12 @@ export default function () {
         return game;
     }
 
-    function incrementPlayer(playerPosition, bolinha) {
-        let areaPlayer = Math.PI * Math.pow(playerPosition.radius, 2);
-        let areaBolinha = Math.PI * Math.pow(bolinha.radius, 2);
-        let areaTotal = areaPlayer + areaBolinha;
+    function incrementPlayer(playerPosition, ball) {
+        let playerArea = Math.PI * Math.pow(playerPosition.radius, 2);
+        let ballArea = Math.PI * Math.pow(ball.radius, 2);
+        let totalArea = playerArea + ballArea;
 
-        let newRadius = Math.sqrt(areaTotal / Math.PI);
+        let newRadius = Math.sqrt(totalArea / Math.PI);
 
         return newRadius;
     }

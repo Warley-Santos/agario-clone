@@ -23,8 +23,8 @@ export default function () {
     }
 
     function drawElements(game, canvasContext) {
-        for (const bolinha of game.bolinhas) {
-            drawCircularEntity(canvasContext, bolinha, '#00ff00');
+        for (const ball of game.balls) {
+            drawCircularEntity(canvasContext, ball, '#00ff00');
         }
 
         drawCircularEntity(canvasContext, game.player.position, '#660099');
