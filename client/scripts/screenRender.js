@@ -1,6 +1,4 @@
-import game from './game.js';
-
-export default function () {
+export default function screenRender (game, document) {
     const canvasSize = { width: 1000, height: 1000 };
 
     let mousePosition;
@@ -8,9 +6,10 @@ export default function () {
     let canvas = document.getElementById('canvas');
     let wrapper = document.getElementById('wrapper');
     let canvasContext = canvas.getContext('2d');
-
+    
+    canvas.addEventListener('mousemove', setMousePos, false);
+    
     function renderScreen(gameState) {
-        canvas.addEventListener('mousemove', setMousePos, false);
         canvasContext.clearRect(0, 0, canvas.width, canvas.height);
 
         gameState = game().gameLoop(gameState, mousePosition);
@@ -22,12 +21,12 @@ export default function () {
         });
     }
 
-    function drawElements(game, canvasContext) {
-        for (const ball of game.balls) {
+    function drawElements(gameState, canvasContext) {
+        for (const ball of gameState.balls) {
             drawCircularEntity(canvasContext, ball, '#00ff00');
         }
 
-        drawCircularEntity(canvasContext, game.player.position, '#660099');
+        drawCircularEntity(canvasContext, gameState.player.position, '#660099');
     }
 
     function drawCircularEntity(canvasContext, itemPosition, color) {
