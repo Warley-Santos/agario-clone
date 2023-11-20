@@ -1,14 +1,18 @@
 export default function screenRender (game, document) {
-    const canvasSize = { width: 1000, height: 1000 };
+    const canvasSize = { width: 1000, height: 800 };
 
     let mousePosition;
 
     let canvas = document.getElementById('canvas');
-    let wrapper = document.getElementById('wrapper');
     let canvasContext = canvas.getContext('2d');
+    let rect = canvas.getBoundingClientRect();
     
-    canvas.addEventListener('mousemove', setMousePos, false);
-    
+    canvas.addEventListener('mousemove', (evt) => {
+        if (!evt.ctrlKey){
+            setMousePos(evt);
+        }
+    }, false);
+
     function renderScreen(gameState) {
         canvasContext.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -35,16 +39,16 @@ export default function screenRender (game, document) {
         canvasContext.fillStyle = color;
         canvasContext.fill();
 
-        canvasContext.font = '25px serif';
-        canvasContext.fillStyle = '#000000';
-        canvasContext.textAlign = 'center';
-        canvasContext.fillText(itemPosition.radius, itemPosition.x, itemPosition.y);
+        // canvasContext.font = '25px serif';
+        // canvasContext.fillStyle = '#000000';
+        // canvasContext.textAlign = 'center';
+        // canvasContext.fillText(itemPosition.radius, itemPosition.x, itemPosition.y);
     }
 
     function setMousePos(evt) {
         mousePosition = {
-            x: evt.clientX,
-            y: evt.clientY
+            x: evt.clientX - rect.left,
+            y: evt.clientY - rect.top
         };
     }
 
@@ -61,8 +65,10 @@ export default function screenRender (game, document) {
             }
         }
         //set the correct attributes for a crystal clear image!
-        canvas.setAttribute('width', screen.width() * dpi);
-        canvas.setAttribute('height', screen.height() * dpi);
+        canvas.setAttribute('width', canvasSize.width * dpi);
+        canvas.setAttribute('height', canvasSize.height * dpi);
+
+        console.log(dpi)
     }
 
     window.onresize = fixDpi;

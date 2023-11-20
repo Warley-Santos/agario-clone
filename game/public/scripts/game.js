@@ -5,7 +5,7 @@ export default function () {
     function startGame() {
         let gameState = {};
 
-        let player = { id: '1234', position: { x: 500, y: 500, radius: 30 } };
+        let player = { id: '1234', position: { x: 500, y: 500, radius: 10 } };
 
         gameState = {
             player: player,
@@ -19,7 +19,7 @@ export default function () {
         let balls = [];
 
         for (var i = 0; i < quantidade; i++) {
-            balls.push({ id: util.random(1000000), x: util.random(canvas.width), y: util.random(canvas.height), radius: util.randomMin(10, 50), color: util.randomColorHex() });
+            balls.push({ id: util.random(1000000), x: util.random(canvas.width), y: util.random(canvas.height), radius: util.randomMin(3, 16.5), color: util.randomColorHex() });
         }
 
         return balls;
@@ -80,7 +80,7 @@ export default function () {
     }
 
     function nextPosition(startPos, finalPos) {
-        let speed = 15;
+        let speed = 2.5;
         let nextPos;
 
         let dx = finalPos.x - startPos.x;
@@ -89,7 +89,7 @@ export default function () {
         let length = Math.sqrt(dx * dx + dy * dy);
 
         // smooth stop
-        if (length <= startPos.radius * 100) {
+        if (length <= startPos.radius * 2000) {
             let newSpeed = length / speed;
 
             speed = newSpeed <= speed ? newSpeed : speed;
